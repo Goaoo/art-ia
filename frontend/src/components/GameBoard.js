@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Penguin from './Penguin';
 import GameElement from './GameElement';
-import { mockGameData } from '../utils/mockData';
 import './GameBoard.css';
 
 const GameBoard = ({ 
