@@ -23,7 +23,7 @@ const GameOver = ({ score, distance, jumps, collectibles, achievements, onRestar
         <Card className="game-over-card">
           <CardHeader className="game-over-header">
             <CardTitle className="game-over-title">
-              🐧 Game Over! 🏔️
+              🐧 {player?.name || 'Player'} - Game Over! 🏔️
             </CardTitle>
             <div className="final-score">
               <span className="score-number">{score.toLocaleString()}</span>
