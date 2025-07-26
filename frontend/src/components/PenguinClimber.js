@@ -2,11 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import GameBoard from './GameBoard';
 import GameUI from './GameUI';
 import GameOver from './GameOver';
-import { mockGameData } from '../utils/mockData';
+import PlayerSetup from './PlayerSetup';
+import gameService from '../services/gameService';
 import './PenguinClimber.css';
 
 const PenguinClimber = () => {
-  const [gameState, setGameState] = useState('playing'); // 'playing', 'paused', 'gameOver'
+  const [gameState, setGameState] = useState('setup'); // 'setup', 'playing', 'paused', 'gameOver'
+  const [player, setPlayer] = useState(null);
+  const [session, setSession] = useState(null);
+  const [gameElements, setGameElements] = useState(null);
   const [score, setScore] = useState(0);
   const [distance, setDistance] = useState(0);
   const [lives, setLives] = useState(3);
@@ -14,6 +18,7 @@ const PenguinClimber = () => {
   const [powerUps, setPowerUps] = useState({});
   const [achievements, setAchievements] = useState([]);
   const [collectibles, setCollectibles] = useState({ fish: 0, coins: 0, gems: 0 });
+  const [loading, setLoading] = useState(false);
 
   const handleScoreUpdate = useCallback((points) => {
     setScore(prev => prev + points);
