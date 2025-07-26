@@ -43,12 +43,17 @@ const GameBoard = ({
   }, [gameElements]);
 
   const generateElements = useCallback(() => {
+    if (!gameElements) return;
+    
     const newElements = [];
     for (let i = 0; i < 5; i++) {
-      newElements.push(generateRandomElement());
+      const element = generateRandomElement();
+      if (element) {
+        newElements.push(element);
+      }
     }
     setElements(newElements);
-  }, [generateRandomElement]);
+  }, [generateRandomElement, gameElements]);
 
   const handleKeyDown = useCallback((e) => {
     setKeys(prev => ({ ...prev, [e.key]: true }));
