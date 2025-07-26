@@ -152,7 +152,9 @@ const GameBoard = ({
   }, [gameState, keys, penguinPosition, checkCollision, onJump, onDistanceUpdate, onPowerUp, onCollectible, onGameOver, powerUps, lives, setLives, generateRandomElement, cameraY]);
 
   useEffect(() => {
-    generateElements();
+    if (gameElements) {
+      generateElements();
+    }
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('keyup', handleKeyUp);
     gameLoopRef.current = requestAnimationFrame(gameLoop);
@@ -164,7 +166,7 @@ const GameBoard = ({
         cancelAnimationFrame(gameLoopRef.current);
       }
     };
-  }, []);
+  }, [gameElements]);
 
   useEffect(() => {
     if (gameState === 'playing') {
