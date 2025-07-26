@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import './GameOver.css';
 
-const GameOver = ({ score, distance, jumps, collectibles, achievements, onRestart }) => {
+const GameOver = ({ score, distance, jumps, collectibles, achievements, onRestart, player }) => {
   const formatDistance = (dist) => Math.floor(dist) + 'm';
   
   const getScoreRank = (score) => {
