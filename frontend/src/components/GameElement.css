@@ -1,0 +1,109 @@
+.game-element {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+  z-index: 45;
+}
+
+.game-element:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.element-icon {
+  font-size: 24px;
+  z-index: 46;
+  animation: element-float 3s ease-in-out infinite;
+}
+
+.element-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  z-index: 44;
+}
+
+/* Power-up styling */
+.power-up {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  border: 2px solid #667eea;
+}
+
+.power-up .element-glow {
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.6) 0%, transparent 70%);
+  animation: power-glow 2s ease-in-out infinite;
+}
+
+.power-up:hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+/* Obstacle styling */
+.obstacle {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  border: 2px solid #ff6b6b;
+}
+
+.obstacle .element-glow {
+  background: radial-gradient(circle, rgba(255, 107, 107, 0.6) 0%, transparent 70%);
+  animation: danger-glow 1.5s ease-in-out infinite;
+}
+
+.obstacle:hover {
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+/* Collectible styling */
+.collectible {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+  border: 2px solid #4ecdc4;
+}
+
+.collectible .element-glow {
+  background: radial-gradient(circle, rgba(78, 205, 196, 0.6) 0%, transparent 70%);
+  animation: collect-glow 2.5s ease-in-out infinite;
+}
+
+.collectible:hover {
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.6);
+}
+
+/* Animations */
+@keyframes element-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes power-glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.2); }
+}
+
+@keyframes danger-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.1); }
+}
+
+@keyframes collect-glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.15); }
+}
+
+/* Specific element types */
+.game-element[title*="Jump"] { animation-delay: 0.5s; }
+.game-element[title*="Speed"] { animation-delay: 1s; }
+.game-element[title*="Shield"] { animation-delay: 1.5s; }
+.game-element[title*="Fish"] { animation-delay: 0.2s; }
+.game-element[title*="Coin"] { animation-delay: 0.8s; }
+.game-element[title*="Gem"] { animation-delay: 1.2s; }
