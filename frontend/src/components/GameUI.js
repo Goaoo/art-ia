@@ -13,7 +13,8 @@ const GameUI = ({
   achievements, 
   collectibles, 
   onPause, 
-  gameState 
+  gameState,
+  player 
 }) => {
   const formatDistance = (dist) => Math.floor(dist) + 'm';
   const formatTime = (timestamp) => {
