@@ -25,7 +25,14 @@ const GameBoard = ({
   const lastUpdateRef = useRef(Date.now());
 
   const generateRandomElement = useCallback(() => {
-    const allElements = [...mockGameData.powerUps, ...mockGameData.obstacles, ...mockGameData.collectibles];
+    if (!gameElements) return null;
+    
+    const allElements = [
+      ...gameElements.powerUps.map(p => ({...p, type: 'powerUp'})),
+      ...gameElements.obstacles.map(o => ({...o, type: 'obstacle'})),
+      ...gameElements.collectibles.map(c => ({...c, type: 'collectible'}))
+    ];
+    
     const randomElement = allElements[Math.floor(Math.random() * allElements.length)];
     return {
       ...randomElement,
@@ -33,7 +40,7 @@ const GameBoard = ({
       y: Math.random() * 200 + 100,
       id: Date.now() + Math.random()
     };
-  }, []);
+  }, [gameElements]);
 
   const generateElements = useCallback(() => {
     const newElements = [];
