@@ -214,6 +214,25 @@ const PenguinClimber = () => {
     }
   }, [session, gameState]);
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="penguin-climber">
+        <div className="loading-screen">
+          <div className="loading-content">
+            <div className="loading-penguin">🐧</div>
+            <div className="loading-text">Setting up your climb...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Player setup state
+  if (gameState === 'setup') {
+    return <PlayerSetup onPlayerReady={handlePlayerReady} />;
+  }
+
   return (
     <div className="penguin-climber">
       <div className="game-container">
@@ -227,6 +246,7 @@ const PenguinClimber = () => {
           collectibles={collectibles}
           onPause={handlePause}
           gameState={gameState}
+          player={player}
         />
         
         {gameState === 'gameOver' ? (
@@ -237,6 +257,7 @@ const PenguinClimber = () => {
             collectibles={collectibles}
             achievements={achievements}
             onRestart={handleRestart}
+            player={player}
           />
         ) : (
           <GameBoard 
@@ -250,6 +271,7 @@ const PenguinClimber = () => {
             powerUps={powerUps}
             lives={lives}
             setLives={setLives}
+            gameElements={gameElements}
           />
         )}
       </div>
