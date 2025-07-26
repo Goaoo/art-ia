@@ -139,8 +139,10 @@ const GameBoard = ({
       // Add new elements as penguin climbs
       while (newElements.length < 8) {
         const newElement = generateRandomElement();
-        newElement.y = Math.random() * 200 + (cameraY - 200);
-        newElements.push(newElement);
+        if (newElement) {
+          newElement.y = Math.random() * 200 + (cameraY - 200);
+          newElements.push(newElement);
+        }
       }
 
       return newElements;
