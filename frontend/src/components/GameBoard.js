@@ -14,7 +14,8 @@ const GameBoard = ({
   onGameOver,
   powerUps,
   lives,
-  setLives
+  setLives,
+  gameElements
 }) => {
   const [penguinPosition, setPenguinPosition] = useState({ x: 400, y: 500 });
   const [elements, setElements] = useState([]);
