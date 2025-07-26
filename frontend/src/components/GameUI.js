@@ -30,6 +30,10 @@ const GameUI = ({
         <Card className="stats-card">
           <CardContent className="stats-content">
             <div className="stat-item">
+              <span className="stat-label">Player</span>
+              <span className="stat-value">{player?.name || 'Guest'}</span>
+            </div>
+            <div className="stat-item">
               <span className="stat-label">Score</span>
               <span className="stat-value">{score.toLocaleString()}</span>
             </div>
