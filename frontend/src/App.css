@@ -1,34 +1,353 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+.app {
+  min-height: 100vh;
+  padding: 32px 20px 48px;
+  background:
+    radial-gradient(circle at 10% 10%, #2f2b5f 0, transparent 35%),
+    radial-gradient(circle at 80% 0%, #1e4f62 0, transparent 30%),
+    linear-gradient(145deg, #0c1020 0%, #0f172a 35%, #111827 100%);
+  color: #e5e7eb;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.hero {
+  max-width: 1100px;
+  margin: 0 auto 20px;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.hero-kicker {
+  display: inline-block;
+  margin: 0 0 8px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #c7d2fe;
+  border: 1px solid rgba(129, 140, 248, 0.35);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
 }
 
-.App-link {
-    color: #61dafb;
+.hero h1 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 44px);
+  color: #f9fafb;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.hero p {
+  margin-top: 10px;
+  max-width: 760px;
+  color: #cbd5e1;
+}
+
+.grid {
+  max-width: 1100px;
+  margin: 0 auto 18px;
+  display: grid;
+  gap: 18px;
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 14px 30px rgba(2, 6, 23, 0.25);
+  backdrop-filter: blur(6px);
+}
+
+.card h2 {
+  margin: 0 0 8px;
+  color: #f8fafc;
+}
+
+.muted {
+  color: #94a3b8;
+}
+
+.small {
+  font-size: 13px;
+}
+
+blockquote {
+  margin: 12px 0 16px;
+  padding: 12px 14px;
+  border-left: 3px solid #818cf8;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.16);
+  color: #e0e7ff;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+}
+
+input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.8);
+  color: #f8fafc;
+  padding: 10px 12px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.25);
+}
+
+.actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #f8fafc;
+  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button.ghost {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.coach-box {
+  margin-top: 14px;
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.coach-box p {
+  margin: 8px 0 0;
+  line-height: 1.45;
+}
+
+.stats {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stats div {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.stats span {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.stats strong {
+  font-size: 20px;
+}
+
+.progress-block {
+  margin-top: 14px;
+}
+
+.progress-block p {
+  margin: 0 0 6px;
+}
+
+.progress {
+  width: 100%;
+  background: rgba(51, 65, 85, 0.75);
+  border-radius: 999px;
+  overflow: hidden;
+  height: 10px;
+}
+
+.progress div {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #84cc16);
+}
+
+.progress.alt div {
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.badge.active {
+  color: #ecfeff;
+  background: rgba(14, 116, 144, 0.55);
+  border-color: rgba(34, 211, 238, 0.45);
+}
+
+.check-list,
+.techniques {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.check-list label {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.check-list input {
+  width: auto;
+  margin-top: 2px;
+}
+
+.techniques li {
+  background: rgba(30, 41, 59, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.top-gap {
+  margin-top: 14px;
+}
+
+.pricing {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.billing-toggle {
+  margin-top: 12px;
+  display: inline-flex;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  padding: 4px;
+}
+
+.billing-toggle button {
+  background: transparent;
+  border-radius: 8px;
+}
+
+.billing-toggle button.active {
+  background: rgba(99, 102, 241, 0.65);
+}
+
+.plans {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.plan {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.plan:hover {
+  border-color: rgba(129, 140, 248, 0.6);
+}
+
+.plan.selected {
+  border-color: rgba(34, 211, 238, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(34, 211, 238, 0.6);
+}
+
+.plan h3 {
+  margin: 0;
+}
+
+.price {
+  margin: 8px 0 4px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ecfeff;
+}
+
+.plan ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #cbd5e1;
+}
+
+.plan li {
+  margin-bottom: 6px;
+}
+
+.checkout {
+  margin-top: 16px;
+  border-radius: 12px;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.checkout h3,
+.checkout h4 {
+  margin: 0 0 8px;
+}
+
+.checkout p {
+  margin: 6px 0;
+}
+
+.payments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.cta {
+  margin-top: 12px;
+  width: 100%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+@media (max-width: 960px) {
+  .grid.two {
+    grid-template-columns: 1fr;
+  }
+
+  .plans {
+    grid-template-columns: 1fr;
+  }
 }
