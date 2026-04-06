@@ -1,124 +1,150 @@
 import React, { useMemo, useState } from "react";
 import "./App.css";
 
-const PLANOS = {
-  gratis: {
+const PLANOS = [
+  {
     id: "gratis",
     nome: "Grátis",
+    selo: "Teste sem risco",
     mensal: 0,
     anual: 0,
-    descricao:
-      "Plano para conhecer o app sem cobrança: rotina base, frases diárias e check-in simples.",
     dureza: "leve",
     categoriasFrases: ["famosos"],
-    tecnicas: [
-      "Micro-hábitos de 2 minutos",
-      "Checklist diário básico",
+    descricao: "Para conhecer o app sem cobrança e criar consistência inicial.",
+    diferenciais: [
+      "Rotina diária essencial",
+      "Check-in básico",
+      "Frase motivadora diária",
+      "Onboarding imediato",
     ],
-    diferenciais: ["Acesso inicial sem custo", "1 rotina diária", "Check-in básico"],
+    tecnicas: ["Micro-hábitos de 2 minutos", "Checklist mínimo viável"],
   },
-  basico: {
+  {
     id: "basico",
     nome: "Básico",
+    selo: "Popular para iniciar",
     mensal: 19.9,
     anual: 199,
-    descricao:
-      "Frases diárias de famosos, rotina de disciplina e cobrança diária estilo coach.",
     dureza: "firme",
     categoriasFrases: ["famosos"],
+    descricao: "Cobrança diária estilo coach e gamificação completa para disciplina.",
+    diferenciais: ["Agenda guiada", "XP + níveis", "Streak diário", "Missões progressivas"],
     tecnicas: [
-      "Micro-hábitos de 2 minutos",
-      "Checklist diário com reforço positivo",
       "Planejamento da noite anterior",
+      "Reforço positivo estruturado",
+      "Empilhamento de hábitos",
     ],
-    diferenciais: ["Agenda guiada", "Streak diário", "XP e níveis"],
   },
-  pro: {
+  {
     id: "pro",
     nome: "Pro",
+    selo: "Mais vendido",
     mensal: 39.9,
     anual: 399,
-    descricao:
-      "Coach super duro, cobrança em dobro e frases de anime, filmes e famosos.",
     dureza: "duro",
     categoriasFrases: ["famosos", "anime", "filmes"],
+    descricao: "Coach super duro, cobrança em dobro e protocolo anti-procrastinação.",
+    diferenciais: [
+      "Cobrança em dobro",
+      "Frases anime/filme/famosos",
+      "Radar de gatilhos de vício",
+      "Relatório semanal de performance",
+    ],
     tecnicas: [
       "Implementação de intenção (Se X, então Y)",
-      "Empilhamento de hábitos",
-      "Urge surfing para controle de impulsos",
-      "Atraso de recompensa (10 minutos)",
-    ],
-    diferenciais: [
-      "Missões em dobro",
-      "Radar de gatilhos de vício",
-      "Relatório semanal com score",
+      "Urge surfing",
+      "Atraso de recompensa",
+      "Contratos de compromisso",
     ],
   },
-  hardcore: {
+  {
     id: "hardcore",
     nome: "Hardcore Ultra",
+    selo: "Modo extremo",
     mensal: 79.9,
     anual: 799,
-    descricao:
-      "Modo máximo: protocolo anti-vício intensivo, metas agressivas e avaliação diária sem desculpas.",
     dureza: "extremo",
     categoriasFrases: ["famosos", "anime", "filmes"],
+    descricao: "Operação disciplina máxima com protocolo intensivo anti-vício.",
+    diferenciais: [
+      "Metas agressivas diárias",
+      "Sala de crise com roteiros",
+      "Plano de contingência em camadas",
+      "Avaliação diária sem desculpas",
+    ],
     tecnicas: [
       "Reestruturação cognitiva (TCC)",
       "Exposição com prevenção de resposta",
-      "Compromisso público e contrato comportamental",
-      "Bloqueio de gatilhos + plano de contingência",
-      "Jornal de urgência e craving",
-    ],
-    diferenciais: [
-      "Sala de crise 24/7 (roteiros de emergência)",
-      "Desafios hardcore com penalidade simbólica",
-      "Plano de recuperação em camadas",
+      "Jornal de craving e urgência",
+      "Bloqueio de gatilhos ambientais",
     ],
   },
-};
+];
 
 const FRASES = {
   famosos: [
-    "Disciplina é escolher entre o que você quer agora e o que você quer mais. — Abraham Lincoln (atribuída)",
-    "Sem disciplina, o talento não vence. — Cristiano Ronaldo",
-    "A ação é a chave fundamental para todo sucesso. — Pablo Picasso",
-    "Você não precisa ser extremo, só consistente. — James Clear",
+    "Disciplina é a ponte entre metas e resultados. — Jim Rohn",
+    "A consistência transforma o comum em extraordinário. — Robin Sharma",
+    "A ação derrota a ansiedade. — Mel Robbins",
+    "Não precisa ser extremo, precisa ser constante. — James Clear",
   ],
   anime: [
-    "Não desista. O começo é sempre o mais difícil. — Naruto",
-    "A diferença entre o novato e o mestre é que o mestre falhou mais vezes. — Koro-sensei",
-    "Quem supera seus limites cresce de verdade. — Goku",
-    "Uma pessoa cresce quando é capaz de superar dificuldades. — Jiraiya",
+    "O poder vem da vontade de não desistir. — Naruto",
+    "Um passo por dia ainda é progresso. — Tanjiro",
+    "Você evolui quando supera seus limites. — Goku",
+    "A dor do treino vence a dor do arrependimento. — Rock Lee",
   ],
   filmes: [
-    "Não é sobre quantas vezes você bate, e sim quantas aguenta apanhar e seguir em frente. — Rocky Balboa",
+    "Não importa quantas vezes você cai, importa quantas levanta. — Rocky",
     "Faça, ou não faça. Tentativa não há. — Yoda",
     "Grandes homens não nascem grandes, tornam-se grandes. — O Poderoso Chefão",
     "Nossos atos nos definem. — Batman Begins",
   ],
 };
 
-const ROTINA_BASE = [
-  { id: "manhã", periodo: "Manhã", tarefa: "Acordar sem soneca + água + 10 min foco" },
-  { id: "tarde", periodo: "Tarde", tarefa: "Bloco profundo de 50 min sem distração" },
-  { id: "noite", periodo: "Noite", tarefa: "Revisão do dia + planejamento de amanhã" },
-];
-
-const VICIOS_BASE = [
-  "Uso excessivo de redes sociais",
-  "Pornografia",
-  "Apostas",
-  "Procrastinação por vídeos curtos",
-];
-
-const PAGAMENTOS = [
+const METODOS_PAGAMENTO = [
   "Cartão de crédito",
   "Cartão de débito",
   "PIX",
-  "Boleto bancário",
+  "Boleto",
   "PayPal",
   "Apple Pay / Google Pay",
+];
+
+const ROTINA_PADRAO = [
+  { id: "r1", titulo: "Acordar sem soneca + água", pontos: 30 },
+  { id: "r2", titulo: "Bloco profundo de 50 minutos", pontos: 40 },
+  { id: "r3", titulo: "Treino ou caminhada de 20 minutos", pontos: 35 },
+  { id: "r4", titulo: "Planejar o dia seguinte", pontos: 30 },
+];
+
+const GATILHOS = [
+  "Redes sociais em horários improdutivos",
+  "Vídeos curtos sem controle",
+  "Apostas/compulsão de risco",
+  "Conteúdo adulto compulsivo",
+];
+
+const DEPOIMENTOS = [
+  { nome: "Renato, 27", texto: "Saí de 0 para 19 dias de streak. A cobrança diária mudou meu jogo." },
+  { nome: "Camila, 31", texto: "O modo Pro me fez cortar distração. Produção subiu muito em 2 semanas." },
+  { nome: "Davi, 22", texto: "Usei o protocolo anti-vício e finalmente consegui ritmo de disciplina." },
+];
+
+const FAQ = [
+  {
+    pergunta: "Existe cobrança automática no plano grátis?",
+    resposta: "Não. O plano grátis é sem cobrança. Upgrade só quando você escolher um plano pago.",
+  },
+  {
+    pergunta: "Esse app substitui terapia?",
+    resposta:
+      "Não. O app oferece suporte comportamental e técnicas práticas, mas não substitui atendimento clínico.",
+  },
+  {
+    pergunta: "Tem plano mensal e anual?",
+    resposta: "Sim. Todos os planos pagos têm opção mensal e anual com economia no ciclo anual.",
+  },
 ];
 
 function formatarBRL(valor) {
@@ -134,265 +160,214 @@ function obterIndiceDoDia() {
 
 function App() {
   const [ciclo, setCiclo] = useState("mensal");
-  const [planoSelecionado, setPlanoSelecionado] = useState("gratis");
-  const [rotinaConcluida, setRotinaConcluida] = useState({});
-  const [viciosControlados, setViciosControlados] = useState({});
-  const [diasConsecutivos, setDiasConsecutivos] = useState(4);
-  const [checkins, setCheckins] = useState(0);
-  const [focoSemana, setFocoSemana] = useState("Reduzir 80% do uso impulsivo de celular");
+  const [planoSelecionado, setPlanoSelecionado] = useState("pro");
+  const [metodoPagamento, setMetodoPagamento] = useState(METODOS_PAGAMENTO[2]);
+  const [rotina, setRotina] = useState(
+    ROTINA_PADRAO.reduce((acc, item) => ({ ...acc, [item.id]: false }), {}),
+  );
+  const [gatilhosControlados, setGatilhosControlados] = useState(
+    GATILHOS.reduce((acc, item) => ({ ...acc, [item]: false }), {}),
+  );
+  const [onboard, setOnboard] = useState({
+    nome: "",
+    email: "",
+    meta: "Construir 30 dias de disciplina sem recaídas fortes",
+    focoVicio: "Uso excessivo de celular",
+  });
+  const [clienteAtivo, setClienteAtivo] = useState(false);
   const [mensagemCoach, setMensagemCoach] = useState("");
+  const [pedidoStatus, setPedidoStatus] = useState("");
+  const [checkins, setCheckins] = useState(0);
+  const [streak, setStreak] = useState(3);
 
-  const plano = PLANOS[planoSelecionado];
+  const plano = PLANOS.find((item) => item.id === planoSelecionado) || PLANOS[0];
   const indiceDoDia = obterIndiceDoDia();
 
   const fraseDoDia = useMemo(() => {
-    const todas = plano.categoriasFrases.flatMap((categoria) => FRASES[categoria] || []);
-    return todas[indiceDoDia % todas.length];
+    const frases = plano.categoriasFrases.flatMap((categoria) => FRASES[categoria] || []);
+    return frases[indiceDoDia % frases.length];
   }, [indiceDoDia, plano.categoriasFrases]);
 
   const progressoRotina = useMemo(() => {
-    const total = ROTINA_BASE.length;
-    const feitas = ROTINA_BASE.filter((item) => rotinaConcluida[item.id]).length;
-    return { feitas, total, pct: Math.round((feitas / total) * 100) };
-  }, [rotinaConcluida]);
+    const concluidas = ROTINA_PADRAO.filter((item) => rotina[item.id]).length;
+    const total = ROTINA_PADRAO.length;
+    return {
+      concluidas,
+      total,
+      pct: Math.round((concluidas / total) * 100),
+      xp: ROTINA_PADRAO.filter((item) => rotina[item.id]).reduce((acc, item) => acc + item.pontos, 0),
+    };
+  }, [rotina]);
 
   const progressoVicios = useMemo(() => {
-    const total = VICIOS_BASE.length;
-    const controlados = VICIOS_BASE.filter((nome) => viciosControlados[nome]).length;
-    return { controlados, total, pct: Math.round((controlados / total) * 100) };
-  }, [viciosControlados]);
+    const controlados = GATILHOS.filter((item) => gatilhosControlados[item]).length;
+    const total = GATILHOS.length;
+    return {
+      controlados,
+      total,
+      pct: Math.round((controlados / total) * 100),
+      xp: controlados * 45,
+    };
+  }, [gatilhosControlados]);
 
-  const xpTotal = useMemo(() => {
-    const xpRotina = progressoRotina.feitas * 30;
-    const xpVicios = progressoVicios.controlados * 40;
-    const xpCheckins = checkins * 60;
-    return xpRotina + xpVicios + xpCheckins;
-  }, [progressoRotina.feitas, progressoVicios.controlados, checkins]);
-
-  const nivel = Math.max(1, Math.floor(xpTotal / 120) + 1);
-
+  const xpTotal = progressoRotina.xp + progressoVicios.xp + checkins * 80;
+  const nivel = Math.max(1, Math.floor(xpTotal / 140) + 1);
   const precoAtual = plano[ciclo];
-  const assinaturaGratis = precoAtual === 0;
-  const precoMensalEquivalente = ciclo === "anual" ? plano.anual / 12 : plano.mensal;
+  const planoGratis = precoAtual === 0;
+  const economiaAnual = Math.max(0, plano.mensal * 12 - plano.anual);
 
-  const economiza = useMemo(() => {
-    const anualSemDesconto = plano.mensal * 12;
-    return Math.max(0, anualSemDesconto - plano.anual);
-  }, [plano.anual, plano.mensal]);
+  const badges = [
+    { nome: "Arrancada", ativo: checkins >= 1 },
+    { nome: "Foco de aço", ativo: progressoRotina.concluidas >= 3 },
+    { nome: "Controle mental", ativo: progressoVicios.controlados >= 2 },
+    { nome: "Disciplina monstra", ativo: streak >= 10 },
+  ];
 
-  const badges = useMemo(() => {
-    return [
-      { nome: "Início bruto", ativo: checkins >= 1 },
-      { nome: "Foco de aço", ativo: progressoRotina.feitas === ROTINA_BASE.length },
-      { nome: "Sem recaída hoje", ativo: progressoVicios.controlados >= 2 },
-      { nome: "Monstro da consistência", ativo: diasConsecutivos >= 7 },
-    ];
-  }, [checkins, progressoRotina.feitas, progressoVicios.controlados, diasConsecutivos]);
-
-  function toggleRotina(id) {
-    setRotinaConcluida((prev) => ({ ...prev, [id]: !prev[id] }));
+  function alterarCampoOnboard(chave, valor) {
+    setOnboard((prev) => ({ ...prev, [chave]: valor }));
   }
 
-  function toggleVicio(nome) {
-    setViciosControlados((prev) => ({ ...prev, [nome]: !prev[nome] }));
+  function iniciarPlanoGratis(event) {
+    event.preventDefault();
+    if (!onboard.nome || !onboard.email) {
+      setPedidoStatus("Preencha nome e e-mail para iniciar o plano grátis.");
+      return;
+    }
+    setPlanoSelecionado("gratis");
+    setClienteAtivo(true);
+    setPedidoStatus(`Conta criada para ${onboard.nome}. Você já está no plano Grátis sem cobrança.`);
+    setMensagemCoach(
+      `Bem-vindo, ${onboard.nome}. Hoje seu compromisso é simples: execute o básico sem negociar com a preguiça.`,
+    );
   }
 
-  function finalizarCheckinDiario() {
-    const rotinaOk = progressoRotina.feitas >= 2;
+  function alternarRotina(id) {
+    setRotina((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
+
+  function alternarGatilho(gatilho) {
+    setGatilhosControlados((prev) => ({ ...prev, [gatilho]: !prev[gatilho] }));
+  }
+
+  function gerarCobrancaDiaria() {
+    const faltamRotina = ROTINA_PADRAO.filter((item) => !rotina[item.id]).length;
+    const faltamGatilhos = GATILHOS.filter((item) => !gatilhosControlados[item]).length;
+    const tecnica = plano.tecnicas[indiceDoDia % plano.tecnicas.length];
+
+    const tom =
+      plano.id === "hardcore"
+        ? "Hardcore Ultra ativo. Hoje não existe espaço para desculpas."
+        : plano.id === "pro"
+          ? "Modo Pro ativo. Execução em alto padrão."
+          : plano.id === "basico"
+            ? "Modo Básico ativo. Consistência vence motivação."
+            : "Modo Grátis ativo. O foco é criar constância de verdade.";
+
+    const texto = `${tom} Meta principal: ${onboard.meta}. Gatilho prioritário: ${onboard.focoVicio}. Faltam ${faltamRotina} blocos da rotina e ${faltamGatilhos} controles de gatilho. Técnica do dia: ${tecnica}. Próxima ação: iniciar um bloco de foco de 5 minutos agora.`;
+    setMensagemCoach(texto);
+  }
+
+  function finalizarCheckin() {
+    const rotinaOk = progressoRotina.concluidas >= 3;
     const viciosOk = progressoVicios.controlados >= 1;
 
     if (rotinaOk && viciosOk) {
       setCheckins((prev) => prev + 1);
-      setDiasConsecutivos((prev) => prev + 1);
-      setMensagemCoach(
-        "Check-in aprovado. Você cumpriu o combinado de hoje. Continue assim amanhã sem negociar com a preguiça.",
-      );
+      setStreak((prev) => prev + 1);
+      setMensagemCoach("Check-in aprovado. Você executou o mínimo de elite. Repita amanhã.");
       return;
     }
 
-    setDiasConsecutivos((prev) => Math.max(0, prev - 1));
+    setStreak((prev) => Math.max(0, prev - 1));
     setMensagemCoach(
-      "Check-in reprovado. Faltou execução mínima. Ajuste o ambiente, reduza distrações e volte para a rotina agora.",
+      "Check-in reprovado. Ajuste o ambiente agora: bloqueie distrações, reduza a meta e execute o próximo passo.",
     );
   }
 
-  function gerarCobrancaCoach() {
-    const faltamRotina = ROTINA_BASE.filter((item) => !rotinaConcluida[item.id]).map(
-      (item) => item.periodo.toLowerCase(),
+  function simularCheckout() {
+    if (!clienteAtivo) {
+      setPedidoStatus("Ative sua conta no formulário de onboarding antes de assinar.");
+      return;
+    }
+
+    if (plano.id === "gratis") {
+      setPedidoStatus("Plano Grátis ativo. Nenhuma cobrança realizada.");
+      return;
+    }
+
+    setPedidoStatus(
+      `Assinatura simulada com sucesso: ${plano.nome} (${ciclo}) via ${metodoPagamento}. Total: ${formatarBRL(
+        precoAtual,
+      )}.`,
     );
-    const faltamControle = VICIOS_BASE.filter((nome) => !viciosControlados[nome]).length;
-
-    const tom =
-      plano.id === "gratis"
-        ? "Modo Grátis ativo. Vamos construir consistência primeiro."
-        : plano.dureza === "extremo"
-        ? "Você está no modo Hardcore Ultra. Sem desculpas."
-        : plano.dureza === "duro"
-          ? "Modo Pro ativo. Cobrança em dobro."
-          : "Modo Básico ativo. Consistência diária.";
-
-    const blocoRotina =
-      faltamRotina.length > 0
-        ? `Ainda faltam blocos da rotina: ${faltamRotina.join(", ")}.`
-        : "Rotina concluída em 100% hoje.";
-
-    const blocoVicio =
-      faltamControle > 0
-        ? `Você ainda não marcou controle em ${faltamControle} gatilhos de vício.`
-        : "Excelente: você marcou controle em todos os gatilhos monitorados.";
-
-    const tecnica = plano.tecnicas[indiceDoDia % plano.tecnicas.length];
-    const proximaAcao =
-      faltamRotina.length > 0
-        ? "Próxima ação em 5 minutos: inicie o próximo bloco de foco com cronômetro."
-        : "Próxima ação em 5 minutos: revisar metas de amanhã e dormir no horário.";
-
-    setMensagemCoach(`${tom} ${blocoRotina} ${blocoVicio} Técnica do dia: ${tecnica}. ${proximaAcao}`);
   }
 
   return (
-    <main className="app">
+    <main className="saas">
+      <header className="topbar">
+        <div className="brand">
+          <span className="brand-dot" />
+          <strong>Disciplina+ Coach</strong>
+        </div>
+        <nav>
+          <a href="#precos">Planos</a>
+          <a href="#onboarding">Onboarding</a>
+          <a href="#dashboard">Dashboard</a>
+        </nav>
+      </header>
+
       <section className="hero">
-        <p className="hero-kicker">Vibe Coding • Disciplina Gamificada com Agente Integrado</p>
-        <h1>Disciplina+ Coach</h1>
-        <p>
-          Um app para execução real: rotina diária, cobrança estilo coach, frases motivadoras,
-          plano anti-vícios com base psicológica e assinatura mensal/anual.
-        </p>
-      </section>
-
-      <section className="grid two">
-        <article className="card">
-          <h2>Agente Coach do Dia</h2>
-          <p className="muted">Frase motivadora diária do seu plano:</p>
-          <blockquote>{fraseDoDia}</blockquote>
-
-          <label htmlFor="foco-semana">Foco principal da semana</label>
-          <input
-            id="foco-semana"
-            value={focoSemana}
-            onChange={(e) => setFocoSemana(e.target.value)}
-            placeholder="Ex: 14 dias sem apostas"
-          />
-
-          <div className="actions">
-            <button type="button" onClick={gerarCobrancaCoach}>
-              Gerar cobrança diária
-            </button>
-            <button type="button" className="ghost" onClick={finalizarCheckinDiario}>
-              Finalizar check-in
-            </button>
-          </div>
-
-          <div className="coach-box">
-            <strong>Mensagem do agente:</strong>
-            <p>{mensagemCoach || "Clique em “Gerar cobrança diária” para receber sua chamada de ação."}</p>
-          </div>
-        </article>
-
-        <article className="card">
-          <h2>Gamificação de Disciplina</h2>
-          <div className="stats">
-            <div>
-              <span>XP total</span>
-              <strong>{xpTotal}</strong>
-            </div>
-            <div>
-              <span>Nível</span>
-              <strong>{nivel}</strong>
-            </div>
-            <div>
-              <span>Streak</span>
-              <strong>{diasConsecutivos} dias</strong>
-            </div>
-            <div>
-              <span>Check-ins</span>
-              <strong>{checkins}</strong>
-            </div>
-          </div>
-
-          <div className="progress-block">
-            <p>Rotina diária: {progressoRotina.pct}%</p>
-            <div className="progress">
-              <div style={{ width: `${progressoRotina.pct}%` }} />
-            </div>
-          </div>
-
-          <div className="progress-block">
-            <p>Controle de vícios: {progressoVicios.pct}%</p>
-            <div className="progress alt">
-              <div style={{ width: `${progressoVicios.pct}%` }} />
-            </div>
-          </div>
-
-          <div className="badges">
-            {badges.map((badge) => (
-              <span key={badge.nome} className={badge.ativo ? "badge active" : "badge"}>
-                {badge.nome}
-              </span>
-            ))}
-          </div>
-        </article>
-      </section>
-
-      <section className="grid two">
-        <article className="card">
-          <h2>Rotina de Disciplina</h2>
-          <p className="muted">Marque seus blocos obrigatórios do dia:</p>
-          <ul className="check-list">
-            {ROTINA_BASE.map((item) => (
-              <li key={item.id}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={Boolean(rotinaConcluida[item.id])}
-                    onChange={() => toggleRotina(item.id)}
-                  />
-                  <span>
-                    <strong>{item.periodo}:</strong> {item.tarefa}
-                  </span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="card">
-          <h2>Ajuda para Parar Vícios</h2>
-          <p className="muted">
-            Baseado em técnicas psicológicas práticas (TCC, urge surfing, contrato comportamental):
+        <div>
+          <p className="kicker">Versão Comercial • Estilo Lovable</p>
+          <h1>Seu coach de disciplina com produto pronto para vender</h1>
+          <p>
+            Landing de conversão, onboarding, plano grátis, planos mensal/anual, checkout,
+            gamificação e rotina anti-vício com técnicas psicológicas aplicáveis no dia a dia.
           </p>
-          <ul className="techniques">
-            {plano.tecnicas.map((tecnica) => (
-              <li key={tecnica}>{tecnica}</li>
-            ))}
+          <div className="hero-actions">
+            <a href="#onboarding" className="btn">
+              Começar grátis
+            </a>
+            <a href="#precos" className="btn ghost">
+              Ver planos
+            </a>
+          </div>
+        </div>
+        <aside className="hero-card">
+          <h3>Oferta comercial</h3>
+          <ul>
+            <li>Plano Grátis sem cobrança</li>
+            <li>Básico R$ 19,90/mês</li>
+            <li>Pro R$ 39,90/mês</li>
+            <li>Hardcore Ultra R$ 79,90/mês</li>
           </ul>
+          <p className="micro">
+            Inclui cobrança diária estilo coach, frases motivadoras e protocolo anti-vício.
+          </p>
+        </aside>
+      </section>
 
-          <p className="muted top-gap">Marque os gatilhos que você controlou hoje:</p>
-          <ul className="check-list">
-            {VICIOS_BASE.map((nome) => (
-              <li key={nome}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={Boolean(viciosControlados[nome])}
-                    onChange={() => toggleVicio(nome)}
-                  />
-                  <span>{nome}</span>
-                </label>
-              </li>
-            ))}
-          </ul>
+      <section className="cards-3">
+        <article className="panel">
+          <h3>Agente integrado</h3>
+          <p>Cobrança diária inteligente por plano com tom adaptado de leve a extremo.</p>
+        </article>
+        <article className="panel">
+          <h3>Gamificação séria</h3>
+          <p>XP, níveis, streak e badges para reforçar consistência e reduzir recaídas.</p>
+        </article>
+        <article className="panel">
+          <h3>Produto comercial</h3>
+          <p>Jornada pronta: aquisição (landing) → ativação (onboarding) → retenção (dashboard).</p>
         </article>
       </section>
 
-      <section className="card pricing">
-        <h2>Planos de Assinatura</h2>
-        <p className="muted">
-          Escolha mensal ou anual. No anual, você economiza e reforça compromisso de longo prazo.
-        </p>
-
-        <div className="billing-toggle">
+      <section id="precos" className="panel pricing">
+        <div className="section-head">
+          <h2>Planos e Assinatura</h2>
+          <p>Escolha o ciclo de cobrança e o plano ideal para sua intensidade de execução.</p>
+        </div>
+        <div className="billing-switch">
           <button
             type="button"
             className={ciclo === "mensal" ? "active" : ""}
@@ -409,26 +384,28 @@ function App() {
           </button>
         </div>
 
-        <div className="plans">
-          {Object.values(PLANOS).map((item) => {
+        <div className="plan-grid">
+          {PLANOS.map((item) => {
             const valor = item[ciclo];
-            const equivalencia = ciclo === "anual" ? item.anual / 12 : item.mensal;
+            const selecionado = item.id === planoSelecionado;
+            const economia = Math.max(0, item.mensal * 12 - item.anual);
             return (
-              <div
+              <article
                 key={item.id}
-                className={planoSelecionado === item.id ? "plan selected" : "plan"}
+                className={selecionado ? "plan-card selected" : "plan-card"}
+                role="button"
+                tabIndex={0}
                 onClick={() => setPlanoSelecionado(item.id)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") setPlanoSelecionado(item.id);
                 }}
-                role="button"
-                tabIndex={0}
               >
+                <p className="tag">{item.selo}</p>
                 <h3>{item.nome}</h3>
                 <p className="price">{formatarBRL(valor)}</p>
-                <p className="muted small">
-                  {ciclo === "mensal" ? "por mês" : "por ano"} • Equivale a{" "}
-                  {formatarBRL(equivalencia)}/mês
+                <p className="micro">
+                  {ciclo === "mensal" ? "por mês" : "por ano"}
+                  {ciclo === "anual" && economia > 0 ? ` • economiza ${formatarBRL(economia)}` : ""}
                 </p>
                 <p>{item.descricao}</p>
                 <ul>
@@ -436,46 +413,229 @@ function App() {
                     <li key={diferencial}>{diferencial}</li>
                   ))}
                 </ul>
-              </div>
+              </article>
             );
           })}
         </div>
+      </section>
 
-        <div className="checkout">
-          <h3>Resumo do pedido</h3>
-          <p>
-            Plano escolhido: <strong>{plano.nome}</strong>
-          </p>
-          <p>
-            Modalidade: <strong>{ciclo}</strong>
-          </p>
-          <p>
-            Total agora: <strong>{formatarBRL(precoAtual)}</strong>
-          </p>
-          <p className="muted small">
-            {assinaturaGratis
-              ? "Sem cobrança no plano grátis. Faça upgrade quando quiser recursos avançados."
-              : `Valor mensal equivalente: ${formatarBRL(precoMensalEquivalente)}. ${
-                  ciclo === "anual" && economiza > 0
-              ? `Economia anual: ${formatarBRL(economiza)}`
-              : "Sem fidelidade no plano mensal."
-                }`}
-          </p>
+      <section id="onboarding" className="panel onboarding">
+        <div className="section-head">
+          <h2>Onboarding do Cliente</h2>
+          <p>Fluxo de ativação em minutos para entrada no plano grátis e upgrade posterior.</p>
+        </div>
+        <form onSubmit={iniciarPlanoGratis} className="onboard-form">
+          <label htmlFor="nome">
+            Nome
+            <input
+              id="nome"
+              value={onboard.nome}
+              onChange={(event) => alterarCampoOnboard("nome", event.target.value)}
+              placeholder="Seu nome"
+            />
+          </label>
+          <label htmlFor="email">
+            E-mail
+            <input
+              id="email"
+              type="email"
+              value={onboard.email}
+              onChange={(event) => alterarCampoOnboard("email", event.target.value)}
+              placeholder="voce@email.com"
+            />
+          </label>
+          <label htmlFor="meta">
+            Meta de disciplina
+            <input
+              id="meta"
+              value={onboard.meta}
+              onChange={(event) => alterarCampoOnboard("meta", event.target.value)}
+            />
+          </label>
+          <label htmlFor="vicio">
+            Foco anti-vício
+            <input
+              id="vicio"
+              value={onboard.focoVicio}
+              onChange={(event) => alterarCampoOnboard("focoVicio", event.target.value)}
+            />
+          </label>
+          <button type="submit" className="btn full">
+            Ativar plano grátis
+          </button>
+        </form>
+      </section>
 
-          <h4>Tipos de pagamento</h4>
-          <div className="payments">
-            {PAGAMENTOS.map((pagamento) => (
-              <span key={pagamento} className="chip">
-                {pagamento}
+      <section id="dashboard" className="dashboard">
+        <div className="section-head">
+          <h2>Dashboard do Cliente</h2>
+          <p>Gestão diária de disciplina com coach, rotina, vícios e cobrança.</p>
+        </div>
+
+        <div className="cards-3 stats-row">
+          <article className="panel stat">
+            <p>XP total</p>
+            <strong>{xpTotal}</strong>
+          </article>
+          <article className="panel stat">
+            <p>Nível atual</p>
+            <strong>{nivel}</strong>
+          </article>
+          <article className="panel stat">
+            <p>Streak</p>
+            <strong>{streak} dias</strong>
+          </article>
+        </div>
+
+        <div className="dashboard-grid">
+          <article className="panel">
+            <h3>Coach do Dia</h3>
+            <blockquote>{fraseDoDia}</blockquote>
+            <div className="actions">
+              <button type="button" className="btn" onClick={gerarCobrancaDiaria}>
+                Gerar cobrança diária
+              </button>
+              <button type="button" className="btn ghost" onClick={finalizarCheckin}>
+                Finalizar check-in
+              </button>
+            </div>
+            <p className="coach-msg">
+              {mensagemCoach || "Ative o coach para receber sua cobrança e plano de ação de hoje."}
+            </p>
+          </article>
+
+          <article className="panel">
+            <h3>Rotina de Disciplina</h3>
+            <ul className="checklist">
+              {ROTINA_PADRAO.map((item) => (
+                <li key={item.id}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={Boolean(rotina[item.id])}
+                      onChange={() => alternarRotina(item.id)}
+                    />
+                    <span>
+                      {item.titulo} <small>(+{item.pontos} XP)</small>
+                    </span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <p className="micro">
+              Progresso: {progressoRotina.concluidas}/{progressoRotina.total} ({progressoRotina.pct}%)
+            </p>
+            <div className="progress">
+              <div style={{ width: `${progressoRotina.pct}%` }} />
+            </div>
+          </article>
+
+          <article className="panel">
+            <h3>Controle de Vícios</h3>
+            <ul className="checklist">
+              {GATILHOS.map((item) => (
+                <li key={item}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={Boolean(gatilhosControlados[item])}
+                      onChange={() => alternarGatilho(item)}
+                    />
+                    <span>{item}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <p className="micro">
+              Progresso: {progressoVicios.controlados}/{progressoVicios.total} ({progressoVicios.pct}%)
+            </p>
+            <div className="progress alt">
+              <div style={{ width: `${progressoVicios.pct}%` }} />
+            </div>
+          </article>
+
+          <article className="panel">
+            <h3>Cobrança e Checkout</h3>
+            <p>
+              Plano selecionado: <strong>{plano.nome}</strong> ({ciclo})
+            </p>
+            <p>
+              Total atual: <strong>{formatarBRL(precoAtual)}</strong>
+            </p>
+            <label htmlFor="pagamento">
+              Método de pagamento
+              <select
+                id="pagamento"
+                value={metodoPagamento}
+                onChange={(event) => setMetodoPagamento(event.target.value)}
+              >
+                {METODOS_PAGAMENTO.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="payment-chips">
+              {METODOS_PAGAMENTO.map((item) => (
+                <span key={item} className={item === metodoPagamento ? "chip active" : "chip"}>
+                  {item}
+                </span>
+              ))}
+            </div>
+
+            <button type="button" className="btn full" onClick={simularCheckout}>
+              {planoGratis ? "Manter no grátis" : "Simular assinatura"}
+            </button>
+            <p className="micro">
+              {planoGratis
+                ? "Plano grátis sem cobrança."
+                : ciclo === "anual" && economiaAnual > 0
+                  ? `Economia no anual: ${formatarBRL(economiaAnual)}`
+                  : "Pagamento mensal sem fidelidade."}
+            </p>
+            <p className="checkout-status">{pedidoStatus || "Nenhuma transação executada ainda."}</p>
+          </article>
+        </div>
+
+        <article className="panel">
+          <h3>Badges de evolução</h3>
+          <div className="badge-list">
+            {badges.map((badge) => (
+              <span key={badge.nome} className={badge.ativo ? "badge on" : "badge"}>
+                {badge.nome}
               </span>
             ))}
           </div>
-
-          <button type="button" className="cta">
-            {assinaturaGratis ? "Começar grátis" : "Assinar agora"}
-          </button>
-        </div>
+        </article>
       </section>
+
+      <section className="cards-3 testimonials">
+        {DEPOIMENTOS.map((item) => (
+          <article key={item.nome} className="panel">
+            <p className="quote">“{item.texto}”</p>
+            <strong>{item.nome}</strong>
+          </article>
+        ))}
+      </section>
+
+      <section className="panel faq">
+        <h2>Perguntas frequentes</h2>
+        {FAQ.map((item) => (
+          <article key={item.pergunta} className="faq-item">
+            <h4>{item.pergunta}</h4>
+            <p>{item.resposta}</p>
+          </article>
+        ))}
+      </section>
+
+      <footer className="footer">
+        <p>Disciplina+ Coach • Versão comercial pronta para apresentação.</p>
+        <p className="micro">
+          Aviso: suporte comportamental, não substitui atendimento médico/psicológico profissional.
+        </p>
+      </footer>
     </main>
   );
 }
