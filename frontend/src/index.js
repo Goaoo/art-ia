@@ -12,7 +12,8 @@ root.render(
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {
+    const swUrl = `${process.env.PUBLIC_URL || ""}/sw.js`;
+    navigator.serviceWorker.register(swUrl).catch(() => {
       // ignore service worker registration failure
     });
   });

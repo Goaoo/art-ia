@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 const PLANOS = [
@@ -181,6 +181,9 @@ function App() {
   const [pedidoStatus, setPedidoStatus] = useState("");
   const [checkins, setCheckins] = useState(0);
   const [streak, setStreak] = useState(3);
+  const [installPromptEvent, setInstallPromptEvent] = useState(null);
+  const [isIos, setIsIos] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   const plano = PLANOS.find((item) => item.id === planoSelecionado) || PLANOS[0];
   const indiceDoDia = obterIndiceDoDia();
@@ -224,6 +227,25 @@ function App() {
     { nome: "Controle mental", ativo: progressoVicios.controlados >= 2 },
     { nome: "Disciplina monstra", ativo: streak >= 10 },
   ];
+
+  useEffect(() => {
+    const ios = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    const standalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
+    setIsIos(ios);
+    setIsStandalone(standalone);
+  }, []);
+
+  useEffect(() => {
+    function handleBeforeInstallPrompt(event) {
+      event.preventDefault();
+      setInstallPromptEvent(event);
+    }
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+  }, []);
 
   function alterarCampoOnboard(chave, valor) {
     setOnboard((prev) => ({ ...prev, [chave]: valor }));
@@ -304,6 +326,16 @@ function App() {
     );
   }
 
+  async function instalarApp() {
+    if (!installPromptEvent) return;
+    installPromptEvent.prompt();
+    try {
+      await installPromptEvent.userChoice;
+    } finally {
+      setInstallPromptEvent(null);
+    }
+  }
+
   return (
     <main className="saas">
       <header className="topbar">
@@ -343,6 +375,22 @@ function App() {
             <li>Pro R$ 39,90/mês</li>
             <li>Hardcore Ultra R$ 79,90/mês</li>
           </ul>
+          {!isStandalone && (
+            <div className="install-box">
+              <strong>Instale no celular</strong>
+              {installPromptEvent ? (
+                <button type="button" className="btn full" onClick={instalarApp}>
+                  Baixar app grátis
+                </button>
+              ) : (
+                <p className="micro">
+                  {isIos
+                    ? "No iPhone: Safari > Compartilhar > Adicionar à Tela de Início."
+                    : "No Android: menu do navegador > Adicionar à tela inicial."}
+                </p>
+              )}
+            </div>
+          )}
           <p className="micro">
             Inclui cobrança diária estilo coach, frases motivadoras e protocolo anti-vício.
           </p>
