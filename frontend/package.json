@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "homepage": "https://goaoo.github.io/art-ia/",
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

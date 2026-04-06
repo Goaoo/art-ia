@@ -147,6 +147,8 @@ const FAQ = [
   },
 ];
 
+const LINK_PUBLICO_SUGERIDO = "https://goaoo.github.io/art-ia/";
+
 function formatarBRL(valor) {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
@@ -360,6 +362,25 @@ function App() {
           <h3>Produto comercial</h3>
           <p>Jornada pronta: aquisição (landing) → ativação (onboarding) → retenção (dashboard).</p>
         </article>
+      </section>
+
+      <section className="panel install-panel">
+        <h2>Link público estável + instalação no celular</h2>
+        <p>
+          Para distribuição gratuita e segura, publique este app via GitHub Pages (HTTPS) e compartilhe
+          o link público abaixo.
+        </p>
+        <div className="public-link-box">
+          <span>Link sugerido:</span>
+          <a href={LINK_PUBLICO_SUGERIDO} target="_blank" rel="noreferrer">
+            {LINK_PUBLICO_SUGERIDO}
+          </a>
+        </div>
+        <ol>
+          <li>Abra o link no celular (Chrome/Safari).</li>
+          <li>Toque em “Adicionar à tela inicial” para instalar grátis como app.</li>
+          <li>Compartilhe o mesmo link por WhatsApp, Instagram, TikTok ou QR Code.</li>
+        </ol>
       </section>
 
       <section id="precos" className="panel pricing">
