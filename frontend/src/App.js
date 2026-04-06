@@ -2,6 +2,21 @@ import React, { useMemo, useState } from "react";
 import "./App.css";
 
 const PLANOS = {
+  gratis: {
+    id: "gratis",
+    nome: "Grátis",
+    mensal: 0,
+    anual: 0,
+    descricao:
+      "Plano para conhecer o app sem cobrança: rotina base, frases diárias e check-in simples.",
+    dureza: "leve",
+    categoriasFrases: ["famosos"],
+    tecnicas: [
+      "Micro-hábitos de 2 minutos",
+      "Checklist diário básico",
+    ],
+    diferenciais: ["Acesso inicial sem custo", "1 rotina diária", "Check-in básico"],
+  },
   basico: {
     id: "basico",
     nome: "Básico",
@@ -119,7 +134,7 @@ function obterIndiceDoDia() {
 
 function App() {
   const [ciclo, setCiclo] = useState("mensal");
-  const [planoSelecionado, setPlanoSelecionado] = useState("pro");
+  const [planoSelecionado, setPlanoSelecionado] = useState("gratis");
   const [rotinaConcluida, setRotinaConcluida] = useState({});
   const [viciosControlados, setViciosControlados] = useState({});
   const [diasConsecutivos, setDiasConsecutivos] = useState(4);
@@ -157,6 +172,7 @@ function App() {
   const nivel = Math.max(1, Math.floor(xpTotal / 120) + 1);
 
   const precoAtual = plano[ciclo];
+  const assinaturaGratis = precoAtual === 0;
   const precoMensalEquivalente = ciclo === "anual" ? plano.anual / 12 : plano.mensal;
 
   const economiza = useMemo(() => {
@@ -207,7 +223,9 @@ function App() {
     const faltamControle = VICIOS_BASE.filter((nome) => !viciosControlados[nome]).length;
 
     const tom =
-      plano.dureza === "extremo"
+      plano.id === "gratis"
+        ? "Modo Grátis ativo. Vamos construir consistência primeiro."
+        : plano.dureza === "extremo"
         ? "Você está no modo Hardcore Ultra. Sem desculpas."
         : plano.dureza === "duro"
           ? "Modo Pro ativo. Cobrança em dobro."
@@ -435,10 +453,13 @@ function App() {
             Total agora: <strong>{formatarBRL(precoAtual)}</strong>
           </p>
           <p className="muted small">
-            Valor mensal equivalente: {formatarBRL(precoMensalEquivalente)}.{" "}
-            {ciclo === "anual" && economiza > 0
+            {assinaturaGratis
+              ? "Sem cobrança no plano grátis. Faça upgrade quando quiser recursos avançados."
+              : `Valor mensal equivalente: ${formatarBRL(precoMensalEquivalente)}. ${
+                  ciclo === "anual" && economiza > 0
               ? `Economia anual: ${formatarBRL(economiza)}`
-              : "Sem fidelidade no plano mensal."}
+              : "Sem fidelidade no plano mensal."
+                }`}
           </p>
 
           <h4>Tipos de pagamento</h4>
@@ -451,7 +472,7 @@ function App() {
           </div>
 
           <button type="button" className="cta">
-            Assinar agora
+            {assinaturaGratis ? "Começar grátis" : "Assinar agora"}
           </button>
         </div>
       </section>
